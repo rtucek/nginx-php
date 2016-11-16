@@ -24,6 +24,24 @@ RUN \
 
 RUN \
     cd /tmp/build/nginx && \
+    # Verify signature.
+    curl -SLO https://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz.asc && \
+    curl -SLO https://nginx.org/keys/nginx_signing.key && \
+    gpg --import nginx_signing.key && \
+    curl -SLO https://nginx.org/keys/aalexeev.key && \
+    gpg --import aalexeev.key && \
+    curl -SLO https://nginx.org/keys/is.key && \
+    gpg --import is.key && \
+    curl -SLO https://nginx.org/keys/mdounin.key && \
+    gpg --import mdounin.key && \
+    curl -SLO https://nginx.org/keys/maxim.key && \
+    gpg --import maxim.key && \
+    curl -SLO https://nginx.org/keys/sb.key && \
+    gpg --import sb.key && \
+    gpg nginx-${NGINX_VERSION}.tar.gz.asc
+
+RUN \
+    cd /tmp/build/nginx && \
     # Unpack tarball.
     tar -xvzf nginx-${NGINX_VERSION}.tar.gz
 
