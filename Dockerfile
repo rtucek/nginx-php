@@ -1,7 +1,8 @@
 FROM debian:jessie
 
 ENV \
-    NGINX_VERSION=1.11.6
+    NGINX_VERSION=1.11.6 \
+    PHP_VERSION=7.0.13
 
 RUN \
     # Install tools, required for building.
@@ -67,3 +68,18 @@ RUN \
     make build && \
     make modules && \
     make install
+
+RUN \
+    mkdir -p /tmp/build/php/ && \
+    cd /tmp/build/php && \
+
+    # Download PHP.
+    curl -SLo php-${PHP_VERSION}.tar.gz http://ch1.php.net/get/php-${PHP_VERSION}.tar.gz/from/this/mirror
+
+# RUN \
+    # TODO SIG VERIFICATION!!!
+
+RUN \
+    cd /tmp/build/php && \
+    # Unpack tarball.
+    tar -xvzf php-${PHP_VERSION}.tar.gz
