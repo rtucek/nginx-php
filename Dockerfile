@@ -14,7 +14,18 @@ RUN \
 
         # For Nginx
         libssl-dev \
-        libpcre3-dev && \
+        libpcre3-dev \
+
+        # For PHP
+        bison \
+        libbz2-dev \
+        libcurl4-openssl-dev \
+        libpng12-dev \
+        libpq-dev \
+        libxml2-dev \
+        libxslt1-dev \
+        pkg-config \
+        re2c && \
 
     # Prepare for building.
     mkdir -p /tmp/build
@@ -83,3 +94,31 @@ RUN \
     cd /tmp/build/php && \
     # Unpack tarball.
     tar -xvzf php-${PHP_VERSION}.tar.gz
+
+RUN \
+    cd /tmp/build/php/php-${PHP_VERSION} && \
+    # Run configuration.
+    ./configure \
+        --enable-fpm \
+        --enable-mbregex \
+        --enable-mbstring \
+        --enable-opcache \
+        --enable-sockets \
+        --enable-zip \
+        --with-bz2 \
+        --with-curl \
+        --with-gd \
+        --with-gettext \
+        --with-openssl \
+        --with-pcre-regex \
+        --with-pdo-mysql \
+        --with-pdo-pgsql \
+        --with-xsl \
+        --with-zlib
+
+RUN \
+    cd /tmp/build/php/php-${PHP_VERSION} && \
+    # Compile, test and install.
+    make build && \
+    make test && \
+    make install
