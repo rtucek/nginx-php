@@ -7,10 +7,13 @@ RUN \
     # Install tools, required for building.
     apt-get update && \
     apt-get install -y \
+        # In general...
         build-essential \
         curl \
-        libpcre3-dev \
-        libssl-dev && \
+
+        # For Nginx
+        libssl-dev \
+        libpcre3-dev && \
 
     # Prepare for building.
     mkdir -p /tmp/build
@@ -46,8 +49,8 @@ RUN \
     tar -xvzf nginx-${NGINX_VERSION}.tar.gz
 
 RUN \
-    # Run configuration.
     cd /tmp/build/nginx/nginx-${NGINX_VERSION} && \
+    # Run configuration.
     ./configure \
         --with-file-aio \
         --with-http_gunzip_module \
@@ -59,8 +62,8 @@ RUN \
         --with-threads
 
 RUN \
-    # Start compiling, testing and installing.
     cd /tmp/build/nginx/nginx-${NGINX_VERSION} && \
+    # Start compiling and installing.
     make build && \
     make modules && \
     make install
