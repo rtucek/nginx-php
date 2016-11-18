@@ -76,7 +76,7 @@ RUN \
 RUN \
     cd /tmp/build/nginx/nginx-${NGINX_VERSION} && \
     # Start compiling and installing.
-    make build && \
+    make -j$(nproc) build && \
     make modules && \
     make install
 
@@ -119,6 +119,6 @@ RUN \
 RUN \
     cd /tmp/build/php/php-${PHP_VERSION} && \
     # Compile, test and install.
-    make build && \
+    make -j$(nproc) build && \
     make test && \
     make install
