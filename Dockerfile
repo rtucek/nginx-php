@@ -122,3 +122,5 @@ RUN \
     make -j$(nproc) build && \
     make test && \
     make install
+
+COPY nginx.conf /usr/local/nginx/conf/nginx.conf
