@@ -64,6 +64,8 @@ RUN \
     cd /tmp/build/nginx/nginx-${NGINX_VERSION} && \
     # Run configuration
     ./configure \
+        --group=www-data \
+        --user=www-data \
         --with-file-aio \
         --with-http_gunzip_module \
         --with-http_gzip_static_module \
@@ -107,6 +109,8 @@ RUN \
         --enable-zip \
         --with-bz2 \
         --with-curl \
+        --with-fpm-group=www-data \
+        --with-fpm-user=www-data \
         --with-gd \
         --with-gettext \
         --with-openssl \
@@ -123,4 +127,5 @@ RUN \
     make test && \
     make install
 
+# Nginx configuration
 COPY nginx.conf /usr/local/nginx/conf/nginx.conf
