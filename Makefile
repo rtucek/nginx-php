@@ -1,8 +1,9 @@
 REPO = rtucek
 IMAGE = nginx-php
-VERSION = 0.1.0
+VERSION = 1.0.0
+EXTRAVERSION = -unreleased-wip
 
-IMAGE_FQN = $(REPO)/$(IMAGE):$(VERSION)
+IMAGE_FQN = $(REPO)/$(IMAGE):$(VERSION)$(EXTRAVERSION)
 
 .PHONY: build
 

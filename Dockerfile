@@ -5,7 +5,7 @@ ENV \
     PHP_VERSION=7.0.13
 
 RUN \
-    # Install tools, required for building.
+    # Install tools, required for building
     apt-get update && \
     apt-get install -y \
         # In general...
@@ -27,19 +27,19 @@ RUN \
         pkg-config \
         re2c && \
 
-    # Prepare for building.
+    # Prepare for building
     mkdir -p /tmp/build
 
 RUN \
     mkdir -p /tmp/build/nginx/ && \
     cd /tmp/build/nginx && \
 
-    # Download Nginx.
+    # Download Nginx
     curl -SLO https://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz
 
 RUN \
     cd /tmp/build/nginx && \
-    # Verify signature.
+    # Verify signature
     curl -SLO https://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz.asc && \
     curl -SLO https://nginx.org/keys/nginx_signing.key && \
     gpg --import nginx_signing.key && \
@@ -57,12 +57,12 @@ RUN \
 
 RUN \
     cd /tmp/build/nginx && \
-    # Unpack tarball.
+    # Unpack tarball
     tar -xvzf nginx-${NGINX_VERSION}.tar.gz
 
 RUN \
     cd /tmp/build/nginx/nginx-${NGINX_VERSION} && \
-    # Run configuration.
+    # Run configuration
     ./configure \
         --with-file-aio \
         --with-http_gunzip_module \
@@ -75,7 +75,7 @@ RUN \
 
 RUN \
     cd /tmp/build/nginx/nginx-${NGINX_VERSION} && \
-    # Start compiling and installing.
+    # Start compiling and installing
     make -j$(nproc) build && \
     make modules && \
     make install
@@ -84,7 +84,7 @@ RUN \
     mkdir -p /tmp/build/php/ && \
     cd /tmp/build/php && \
 
-    # Download PHP.
+    # Download PHP
     curl -SLo php-${PHP_VERSION}.tar.gz http://ch1.php.net/get/php-${PHP_VERSION}.tar.gz/from/this/mirror
 
 # RUN \
@@ -92,12 +92,12 @@ RUN \
 
 RUN \
     cd /tmp/build/php && \
-    # Unpack tarball.
+    # Unpack tarball
     tar -xvzf php-${PHP_VERSION}.tar.gz
 
 RUN \
     cd /tmp/build/php/php-${PHP_VERSION} && \
-    # Run configuration.
+    # Run configuration
     ./configure \
         --enable-fpm \
         --enable-mbregex \
