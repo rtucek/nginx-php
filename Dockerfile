@@ -22,6 +22,7 @@ RUN \
         libcurl4-openssl-dev \
         libpng12-dev \
         libpq-dev \
+        libreadline-dev \
         libxml2-dev \
         libxslt1-dev \
         pkg-config \
@@ -39,8 +40,9 @@ RUN \
 
 RUN \
     cd /tmp/build/nginx && \
-    # Verify signature
-    curl -SLO https://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz.asc && \
+
+    # GPG keys from the main maintainers of Nginx
+    # Source https://nginx.org/en/pgp_keys.html
     curl -SLO https://nginx.org/keys/nginx_signing.key && \
     gpg --import nginx_signing.key && \
     curl -SLO https://nginx.org/keys/aalexeev.key && \
@@ -53,6 +55,9 @@ RUN \
     gpg --import maxim.key && \
     curl -SLO https://nginx.org/keys/sb.key && \
     gpg --import sb.key && \
+
+    # Verify signature
+    curl -SLO https://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz.asc && \
     gpg nginx-${NGINX_VERSION}.tar.gz.asc
 
 RUN \
@@ -89,8 +94,17 @@ RUN \
     # Download PHP
     curl -SLo php-${PHP_VERSION}.tar.gz http://ch1.php.net/get/php-${PHP_VERSION}.tar.gz/from/this/mirror
 
-# RUN \
-    # TODO SIG VERIFICATION!!!
+RUN \
+    cd /tmp/build/php/ && \
+
+    # GPG keys from the release managers of PHP 7.0
+    # Source https://secure.php.net/gpg-keys.php#gpg-7.0
+    gpg --keyserver pgp.mit.edu/ --recv "1A4E 8B72 77C4 2E53 DBA9  C7B9 BCAA 30EA 9C0D 5763" && \
+    gpg --keyserver pgp.mit.edu/ --recv "6E4F 6AB3 21FD C07F 2C33  2E3A C2BF 0BC4 33CF C8B3" && \
+
+    # Verify signature
+    curl -SLo php-${PHP_VERSION}.tar.gz.asc http://ch1.php.net/get/php-${PHP_VERSION}.tar.gz.asc/from/this/mirror && \
+    gpg php-${PHP_VERSION}.tar.gz.asc
 
 RUN \
     cd /tmp/build/php && \
@@ -104,8 +118,10 @@ RUN \
         --enable-fpm \
         --enable-mbregex \
         --enable-mbstring \
+        --enable-mbstring=all \
         --enable-opcache \
         --enable-sockets \
+        --enable-zip \
         --enable-zip \
         --with-bz2 \
         --with-curl \
@@ -117,12 +133,13 @@ RUN \
         --with-pcre-regex \
         --with-pdo-mysql \
         --with-pdo-pgsql \
+        --with-readline \
         --with-xsl \
         --with-zlib
 
 RUN \
     cd /tmp/build/php/php-${PHP_VERSION} && \
-    # Compile, test and install.
+    # Compile, test and install
     make -j$(nproc) build && \
     make test && \
     make install
