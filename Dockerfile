@@ -22,6 +22,7 @@ RUN \
         libcurl4-openssl-dev \
         libpng12-dev \
         libpq-dev \
+        libreadline-dev \
         libxml2-dev \
         libxslt1-dev \
         pkg-config \
@@ -102,8 +103,10 @@ RUN \
         --enable-fpm \
         --enable-mbregex \
         --enable-mbstring \
+        --enable-mbstring=all \
         --enable-opcache \
         --enable-sockets \
+        --enable-zip \
         --enable-zip \
         --with-bz2 \
         --with-curl \
@@ -113,12 +116,13 @@ RUN \
         --with-pcre-regex \
         --with-pdo-mysql \
         --with-pdo-pgsql \
+        --with-readline \
         --with-xsl \
         --with-zlib
 
 RUN \
     cd /tmp/build/php/php-${PHP_VERSION} && \
-    # Compile, test and install.
+    # Compile, test and install
     make -j$(nproc) build && \
     make test && \
     make install
