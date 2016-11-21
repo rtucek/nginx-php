@@ -146,3 +146,40 @@ RUN \
 
 # Nginx configuration
 COPY nginx.conf /usr/local/nginx/conf/nginx.conf
+
+RUN \
+    # Fix permissions
+    chown -R www-data:www-data /usr/local/nginx/html && \
+
+    # Symlink Nginx binary
+    ln -s /usr/local/nginx/sbin/nginx /usr/local/sbin/ && \
+
+    # Copy PHP-FPM configuration files
+    cp /tmp/build/php/php-${PHP_VERSION}/sapi/fpm/php-fpm.conf /usr/local/etc/php-fpm.conf && \
+    cp /tmp/build/php/php-${PHP_VERSION}/sapi/fpm/www.conf /usr/local/etc/www.conf && \
+    cp /tmp/build/php/php-${PHP_VERSION}/php.ini-development /usr/local/php/php.ini && \
+
+    # Patch PHP-FPM for proper loading www.conf
+    sed -Ei \
+        -e 's/^;?\s*include=NONE\/etc\/php-fpm.d\/\*.conf/include=\/usr\/local\/etc\/www.conf/' \
+        /usr/local/etc/php-fpm.conf && \
+
+    # Patch www.conf config connection establishment
+    sed -Ei \
+        -e 's/^;?\s*listen\s*=.*/listen = \/var\/run\/php-fpm.sock/' \
+        -e 's/^;?\s*?\s*listen.owner\s*=.*/listen.owner = www-data/' \
+        -e 's/^;?\s*?\s*listen.group\s*=.*/listen.group = www-data/' \
+        -e 's/^;?\s*?\s*listen.mode\s*=.*/listen.mode = 0660/' \
+        /usr/local/etc/www.conf && \
+
+    # Patch PHP config files on the fly
+    sed -Ei \
+        -e 's/^;?\s*expose_php\s*=.*/expose_php = Off/' \
+        -e 's/^;?\s*cgi.fix_pathinfo\s*=.*/cgi.fix_pathinfo=0/' \
+        -e 's/^;?\s*error_log\s*=.*/error_log = \/usr\/local\/nginx\/logs\/error-php.log/' \
+        -e 's/^;?\s*date.timezone\s*=.*/date.timezone = \"UTC\"/' \
+        -e 's/^;?\s*opcache.enable\s*=.*/opcache.enable = 1/' \
+        -e 's/^;?\s*opcache.enable_cli\s*=.*/opcache.enable_cli=1/' \
+        -e 's/^;?\s*opcache.memory_consumption\s*=.*/opcache.memory_consumption = 256/' \
+        -e 's/^;?\s*opcache.max_accelerated_files\s=.*/opcache.max_accelerated_files = 10000/' \
+        /usr/local/php/php.ini
