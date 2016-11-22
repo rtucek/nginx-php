@@ -26,7 +26,10 @@ RUN \
         libxml2-dev \
         libxslt1-dev \
         pkg-config \
-        re2c && \
+        re2c \
+
+        # For PHP composer
+        git && \
 
     # Prepare for building
     mkdir -p /tmp/build
@@ -183,3 +186,10 @@ RUN \
         -e 's/^;?\s*opcache.memory_consumption\s*=.*/opcache.memory_consumption = 256/' \
         -e 's/^;?\s*opcache.max_accelerated_files\s=.*/opcache.max_accelerated_files = 10000/' \
         /usr/local/php/php.ini
+
+RUN \
+    # Install PHP composer
+    php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" && \
+    php -r "if (hash_file('SHA384', 'composer-setup.php') === 'aa96f26c2b67226a324c27919f1eb05f21c248b987e6195cad9690d5c1ff713d53020a02ac8c217dbf90a7eacc9d141d') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;" && \
+    php composer-setup.php --install-dir=/usr/local/bin --filename=composer && \
+    php -r "unlink('composer-setup.php');"
