@@ -11,10 +11,11 @@ RUN \
         # In general...
         build-essential \
         curl \
+        supervisor \
 
         # For Nginx
-        libssl-dev \
         libpcre3-dev \
+        libssl-dev \
 
         # For PHP
         bison \
