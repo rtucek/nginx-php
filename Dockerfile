@@ -13,7 +13,7 @@ COPY \
 RUN \
     # Install tools, required for building
     apt-get update && \
-    apt-get install -y \
+    apt-get install -y --no-install-recommends \
         # In general...
         build-essential \
         curl \
@@ -196,7 +196,19 @@ RUN \
 
     # Add entrypoint for docker
     mv /tmp/build/scripts/docker-entrypoint / && \
-    chmod +x /docker-entrypoint
+    chmod +x /docker-entrypoint && \
+
+    # Final cleanup
+    apt-get remove -y \
+        bison \
+        build-essential \
+        curl \
+        pkg-config \
+        python-pip \
+        re2c && \
+
+    rm -rf /var/lib/apt/lists/* && \
+    rm -rf /tmp/build
 
 # Declare entrypoint
 ENTRYPOINT ["/docker-entrypoint"]
