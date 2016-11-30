@@ -4,14 +4,19 @@ ENV \
     NGINX_VERSION=1.11.6 \
     PHP_VERSION=7.0.13
 
+COPY \
+    docker-entrypoint \
+    nginx.conf \
+    Procfile \
+    /tmp/build/scripts/
+
 RUN \
     # Install tools, required for building
     apt-get update && \
-    apt-get install -y \
+    apt-get install -y --no-install-recommends \
         # In general...
         build-essential \
         curl \
-        supervisor \
 
         # For Nginx
         libpcre3-dev \
@@ -30,19 +35,24 @@ RUN \
         re2c \
 
         # For PHP composer
-        git && \
+        git \
+
+        # For Honcho
+        python \
+        python-pip \
+        python-pkg-resources && \
+
+    pip install honcho && \
 
     # Prepare for building
-    mkdir -p /tmp/build
+    mkdir -p /tmp/build && \
 
-RUN \
     mkdir -p /tmp/build/nginx/ && \
     cd /tmp/build/nginx && \
 
     # Download Nginx
-    curl -SLO https://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz
+    curl -SLO https://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz && \
 
-RUN \
     cd /tmp/build/nginx && \
 
     # GPG keys from the main maintainers of Nginx
@@ -62,14 +72,12 @@ RUN \
 
     # Verify signature
     curl -SLO https://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz.asc && \
-    gpg nginx-${NGINX_VERSION}.tar.gz.asc
+    gpg nginx-${NGINX_VERSION}.tar.gz.asc && \
 
-RUN \
     cd /tmp/build/nginx && \
     # Unpack tarball
-    tar -xvzf nginx-${NGINX_VERSION}.tar.gz
+    tar -xvzf nginx-${NGINX_VERSION}.tar.gz && \
 
-RUN \
     cd /tmp/build/nginx/nginx-${NGINX_VERSION} && \
     # Run configuration
     ./configure \
@@ -82,23 +90,23 @@ RUN \
         --with-http_ssl_module \
         --with-http_v2_module \
         --with-pcre \
-        --with-threads
+        --with-threads && \
 
-RUN \
     cd /tmp/build/nginx/nginx-${NGINX_VERSION} && \
     # Start compiling and installing
     make -j$(nproc) build && \
     make modules && \
-    make install
+    make install && \
 
-RUN \
+    # Nginx configuration
+    mv /tmp/build/scripts/nginx.conf /usr/local/nginx/conf/ && \
+
     mkdir -p /tmp/build/php/ && \
     cd /tmp/build/php && \
 
     # Download PHP
-    curl -SLo php-${PHP_VERSION}.tar.gz http://ch1.php.net/get/php-${PHP_VERSION}.tar.gz/from/this/mirror
+    curl -SLo php-${PHP_VERSION}.tar.gz http://ch1.php.net/get/php-${PHP_VERSION}.tar.gz/from/this/mirror && \
 
-RUN \
     cd /tmp/build/php/ && \
 
     # GPG keys from the release managers of PHP 7.0
@@ -108,14 +116,12 @@ RUN \
 
     # Verify signature
     curl -SLo php-${PHP_VERSION}.tar.gz.asc http://ch1.php.net/get/php-${PHP_VERSION}.tar.gz.asc/from/this/mirror && \
-    gpg php-${PHP_VERSION}.tar.gz.asc
+    gpg php-${PHP_VERSION}.tar.gz.asc && \
 
-RUN \
     cd /tmp/build/php && \
     # Unpack tarball
-    tar -xvzf php-${PHP_VERSION}.tar.gz
+    tar -xvzf php-${PHP_VERSION}.tar.gz && \
 
-RUN \
     cd /tmp/build/php/php-${PHP_VERSION} && \
     # Run configuration
     ./configure \
@@ -139,19 +145,13 @@ RUN \
         --with-pdo-pgsql \
         --with-readline \
         --with-xsl \
-        --with-zlib
+        --with-zlib && \
 
-RUN \
     cd /tmp/build/php/php-${PHP_VERSION} && \
     # Compile, test and install
     make -j$(nproc) build && \
-    make test && \
-    make install
+    make install && \
 
-# Nginx configuration
-COPY nginx.conf /usr/local/nginx/conf/nginx.conf
-
-RUN \
     # Fix permissions
     chown -R www-data:www-data /usr/local/nginx/html && \
 
@@ -187,28 +187,34 @@ RUN \
         -e 's/^;?\s*opcache.enable_cli\s*=.*/opcache.enable_cli=1/' \
         -e 's/^;?\s*opcache.memory_consumption\s*=.*/opcache.memory_consumption = 256/' \
         -e 's/^;?\s*opcache.max_accelerated_files\s=.*/opcache.max_accelerated_files = 10000/' \
-        /usr/local/php/php.ini
+        /usr/local/php/php.ini && \
 
-RUN \
     # Install PHP composer
     php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" && \
     php -r "if (hash_file('SHA384', 'composer-setup.php') === 'aa96f26c2b67226a324c27919f1eb05f21c248b987e6195cad9690d5c1ff713d53020a02ac8c217dbf90a7eacc9d141d') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;" && \
     php composer-setup.php --install-dir=/usr/local/bin --filename=composer && \
-    php -r "unlink('composer-setup.php');"
+    php -r "unlink('composer-setup.php');" && \
 
-# Install Honcho
-RUN \
-    apt-get install -y \
-        python-pip && \
-    pip install honcho
+    # Configure Honcho
+    mv /tmp/build/scripts/Procfile / && \
 
-# Configure Honcho
-COPY Procfile /
+    # Add entrypoint for docker
+    mv /tmp/build/scripts/docker-entrypoint / && \
+    chmod +x /docker-entrypoint && \
 
-# Add entrypoint for docker
-COPY docker-entrypoint /
-RUN \
-    chmod +x /docker-entrypoint
+    # Final cleanup
+    apt-get remove -y \
+        bison \
+        build-essential \
+        curl \
+        pkg-config \
+        python-pip \
+        re2c && \
+
+    apt-get autoremove -y && \
+
+    rm -rf /var/lib/apt/lists/* && \
+    rm -rf /tmp/build
 
 # Declare entrypoint
 ENTRYPOINT ["/docker-entrypoint"]
