@@ -17,7 +17,6 @@ RUN \
         # In general...
         build-essential \
         curl \
-        python-pip \
 
         # For Nginx
         libpcre3-dev \
@@ -36,7 +35,12 @@ RUN \
         re2c \
 
         # For PHP composer
-        git && \
+        git \
+
+        # For Honcho
+        python \
+        python-pip \
+        python-pkg-resources && \
 
     pip install honcho && \
 
@@ -206,6 +210,8 @@ RUN \
         pkg-config \
         python-pip \
         re2c && \
+
+    apt-get autoremove -y && \
 
     rm -rf /var/lib/apt/lists/* && \
     rm -rf /tmp/build
