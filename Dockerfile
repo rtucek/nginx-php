@@ -11,7 +11,6 @@ RUN \
         # In general...
         build-essential \
         curl \
-        supervisor \
 
         # For Nginx
         libpcre3-dev \
