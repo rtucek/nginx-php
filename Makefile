@@ -11,6 +11,3 @@ default:	build
 
 build:
 	docker build -t $(IMAGE_FQN) .
-
-# tag_latest:
-    # docker tag -f $(NAME):$(VERSION) $(NAME):latest
