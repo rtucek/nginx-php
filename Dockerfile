@@ -215,3 +215,9 @@ ENTRYPOINT ["/docker-entrypoint"]
 
 # Define default command
 CMD ["server"]
+
+# Define Workdir
+WORKDIR "/usr/local/nginx/html"
+
+# Exposing ports
+EXPOSE 80/tcp 443/tcp
