@@ -3,8 +3,18 @@
 # Fix permission ownership
 chown -R www-data:www-data /usr/local/nginx/html/
 
+# Create PHP error log if not present
+# touch /usr/local/nginx/logs/error-php.log
+# chown www-data:www-data /usr/local/nginx/logs/error-php.log
+
 # Update PHP composer
-composer selfupdate -vvvn
+# Update PHP composer to most most recent version (as of now the current version is v1.2.2).
+# By default, we will try to update to the most recent version of PHP composer.
+# However, this blocks starting the initial process IF you have a bad or no Internet connection at
+# all. To avoid this, you can start the container with SKIP_COMPOSER_UPDATE env set to 1.
+if [[ $SKIP_COMPOSER_UPDATE != "1" ]]; then
+    composer selfupdate -vvvn
+fi
 
 if [[ $1 == "server" ]]; then
     exec honcho -d / start
