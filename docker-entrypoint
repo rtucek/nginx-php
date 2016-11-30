@@ -1,0 +1,13 @@
+#!/bin/bash
+
+# Fix permission ownership
+chown -R www-data:www-data /usr/local/nginx/html/
+
+# Update PHP composer
+composer selfupdate -vvvn
+
+if [[ $1 == "server" ]]; then
+    exec honcho -d / start
+fi
+
+exec "$@"

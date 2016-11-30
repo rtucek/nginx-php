@@ -204,3 +204,14 @@ RUN \
 
 # Configure Honcho
 COPY Procfile /
+
+# Add entrypoint for docker
+COPY docker-entrypoint /
+RUN \
+    chmod +x /docker-entrypoint
+
+# Declare entrypoint
+ENTRYPOINT ["/docker-entrypoint"]
+
+# Define default command
+CMD ["server"]
