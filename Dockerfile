@@ -11,10 +11,11 @@ RUN \
         # In general...
         build-essential \
         curl \
+        supervisor \
 
         # For Nginx
-        libssl-dev \
         libpcre3-dev \
+        libssl-dev \
 
         # For PHP
         bison \
@@ -22,10 +23,14 @@ RUN \
         libcurl4-openssl-dev \
         libpng12-dev \
         libpq-dev \
+        libreadline-dev \
         libxml2-dev \
         libxslt1-dev \
         pkg-config \
-        re2c && \
+        re2c \
+
+        # For PHP composer
+        git && \
 
     # Prepare for building
     mkdir -p /tmp/build
@@ -39,8 +44,9 @@ RUN \
 
 RUN \
     cd /tmp/build/nginx && \
-    # Verify signature
-    curl -SLO https://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz.asc && \
+
+    # GPG keys from the main maintainers of Nginx
+    # Source https://nginx.org/en/pgp_keys.html
     curl -SLO https://nginx.org/keys/nginx_signing.key && \
     gpg --import nginx_signing.key && \
     curl -SLO https://nginx.org/keys/aalexeev.key && \
@@ -53,6 +59,9 @@ RUN \
     gpg --import maxim.key && \
     curl -SLO https://nginx.org/keys/sb.key && \
     gpg --import sb.key && \
+
+    # Verify signature
+    curl -SLO https://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz.asc && \
     gpg nginx-${NGINX_VERSION}.tar.gz.asc
 
 RUN \
@@ -64,6 +73,8 @@ RUN \
     cd /tmp/build/nginx/nginx-${NGINX_VERSION} && \
     # Run configuration
     ./configure \
+        --group=www-data \
+        --user=www-data \
         --with-file-aio \
         --with-http_gunzip_module \
         --with-http_gzip_static_module \
@@ -87,8 +98,17 @@ RUN \
     # Download PHP
     curl -SLo php-${PHP_VERSION}.tar.gz http://ch1.php.net/get/php-${PHP_VERSION}.tar.gz/from/this/mirror
 
-# RUN \
-    # TODO SIG VERIFICATION!!!
+RUN \
+    cd /tmp/build/php/ && \
+
+    # GPG keys from the release managers of PHP 7.0
+    # Source https://secure.php.net/gpg-keys.php#gpg-7.0
+    gpg --keyserver pgp.mit.edu/ --recv "1A4E 8B72 77C4 2E53 DBA9  C7B9 BCAA 30EA 9C0D 5763" && \
+    gpg --keyserver pgp.mit.edu/ --recv "6E4F 6AB3 21FD C07F 2C33  2E3A C2BF 0BC4 33CF C8B3" && \
+
+    # Verify signature
+    curl -SLo php-${PHP_VERSION}.tar.gz.asc http://ch1.php.net/get/php-${PHP_VERSION}.tar.gz.asc/from/this/mirror && \
+    gpg php-${PHP_VERSION}.tar.gz.asc
 
 RUN \
     cd /tmp/build/php && \
@@ -102,23 +122,102 @@ RUN \
         --enable-fpm \
         --enable-mbregex \
         --enable-mbstring \
+        --enable-mbstring=all \
         --enable-opcache \
         --enable-sockets \
         --enable-zip \
+        --enable-zip \
         --with-bz2 \
         --with-curl \
+        --with-fpm-group=www-data \
+        --with-fpm-user=www-data \
         --with-gd \
         --with-gettext \
         --with-openssl \
         --with-pcre-regex \
         --with-pdo-mysql \
         --with-pdo-pgsql \
+        --with-readline \
         --with-xsl \
         --with-zlib
 
 RUN \
     cd /tmp/build/php/php-${PHP_VERSION} && \
-    # Compile, test and install.
+    # Compile, test and install
     make -j$(nproc) build && \
     make test && \
     make install
+
+# Nginx configuration
+COPY nginx.conf /usr/local/nginx/conf/nginx.conf
+
+RUN \
+    # Fix permissions
+    chown -R www-data:www-data /usr/local/nginx/html && \
+
+    # Symlink Nginx binary
+    ln -s /usr/local/nginx/sbin/nginx /usr/local/sbin/ && \
+
+    # Copy PHP-FPM configuration files
+    cp /tmp/build/php/php-${PHP_VERSION}/sapi/fpm/php-fpm.conf /usr/local/etc/php-fpm.conf && \
+    cp /tmp/build/php/php-${PHP_VERSION}/sapi/fpm/www.conf /usr/local/etc/www.conf && \
+    cp /tmp/build/php/php-${PHP_VERSION}/php.ini-development /usr/local/php/php.ini && \
+
+    # Patch PHP-FPM for proper loading www.conf
+    sed -Ei \
+        -e 's/^;?\s*daemonize\s*=\s*yes/daemonize = no/' \
+        -e 's/^;?\s*include=NONE\/etc\/php-fpm.d\/\*.conf/include=\/usr\/local\/etc\/www.conf/' \
+        /usr/local/etc/php-fpm.conf && \
+
+    # Patch www.conf config connection establishment
+    sed -Ei \
+        -e 's/^;?\s*listen\s*=.*/listen = \/var\/run\/php-fpm.sock/' \
+        -e 's/^;?\s*?\s*listen.owner\s*=.*/listen.owner = www-data/' \
+        -e 's/^;?\s*?\s*listen.group\s*=.*/listen.group = www-data/' \
+        -e 's/^;?\s*?\s*listen.mode\s*=.*/listen.mode = 0660/' \
+        /usr/local/etc/www.conf && \
+
+    # Patch PHP config files on the fly
+    sed -Ei \
+        -e 's/^;?\s*expose_php\s*=.*/expose_php = Off/' \
+        -e 's/^;?\s*cgi.fix_pathinfo\s*=.*/cgi.fix_pathinfo=0/' \
+        -e 's/^;?\s*error_log\s*=.*/error_log = \/usr\/local\/nginx\/logs\/error-php.log/' \
+        -e 's/^;?\s*date.timezone\s*=.*/date.timezone = \"UTC\"/' \
+        -e 's/^;?\s*opcache.enable\s*=.*/opcache.enable = 1/' \
+        -e 's/^;?\s*opcache.enable_cli\s*=.*/opcache.enable_cli=1/' \
+        -e 's/^;?\s*opcache.memory_consumption\s*=.*/opcache.memory_consumption = 256/' \
+        -e 's/^;?\s*opcache.max_accelerated_files\s=.*/opcache.max_accelerated_files = 10000/' \
+        /usr/local/php/php.ini
+
+RUN \
+    # Install PHP composer
+    php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" && \
+    php -r "if (hash_file('SHA384', 'composer-setup.php') === 'aa96f26c2b67226a324c27919f1eb05f21c248b987e6195cad9690d5c1ff713d53020a02ac8c217dbf90a7eacc9d141d') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;" && \
+    php composer-setup.php --install-dir=/usr/local/bin --filename=composer && \
+    php -r "unlink('composer-setup.php');"
+
+# Install Honcho
+RUN \
+    apt-get install -y \
+        python-pip && \
+    pip install honcho
+
+# Configure Honcho
+COPY Procfile /
+
+# Add entrypoint for docker
+COPY docker-entrypoint /
+RUN \
+    chmod +x /docker-entrypoint
+
+# Declare entrypoint
+ENTRYPOINT ["/docker-entrypoint"]
+
+# Define default command
+CMD ["server"]
+
+# Define Workdir
+WORKDIR "/usr/local/nginx/html"
+
+# Exposing ports
+EXPOSE 80/tcp 443/tcp
