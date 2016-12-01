@@ -22,3 +22,9 @@ docker run -v /path/to/php/source/:/usr/local/nginx/html/ janus1990/docker-nginx
 # With restart policy
 docker run --restart=always -v /path/to/php/source/:/usr/local/nginx/html/ janus1990/docker-nginx-php
 ```
+
+## Todo
+
+- Add [HEALTHCHECK](https://docs.docker.com/engine/reference/builder/#/healthcheck)
+- Extend [README.md](./README.md) with configuration (Procfile, nginx.conf...).
+- Add more support for composer in docker entrypoint.
