@@ -1,6 +1,6 @@
 ## nginx-php Dockerfile
 
-This repository contains source code of [janus1990/docker-nginx-php/](https://hub.docker.com/r/janus1990/docker-nginx-php/).
+This repository contains source code of [janus1990/docker-nginx-php](https://hub.docker.com/r/janus1990/docker-nginx-php/).
 
 ## Content
 
