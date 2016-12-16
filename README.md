@@ -23,8 +23,28 @@ docker run -v /path/to/php/source/:/usr/local/nginx/html/ janus1990/docker-nginx
 docker run --restart=always -v /path/to/php/source/:/usr/local/nginx/html/ janus1990/docker-nginx-php
 ```
 
+## Advanced configuration
+
+You by default, the image is configured to work out of the box, however you may add your own Nginx or
+PHP related configuration files.
+
+### Nginx
+
+Mount your custom `nginx.conf` file at `/usr/local/nginx/conf/nginx.conf`.
+
+`docker run -v /path/to/nginx.conf:/usr/local/nginx/conf/nginx.conf ... janus1990/docker-nginx-php`
+
+### PHP & PHP-FPM
+
+* Mount your custom `php-fpm.conf` file at `/usr/local/etc/php-fpm.conf`.
+* Mount your custom `www.conf` file at `/usr/local/etc/www.conf`.
+* Mount your custom `php.ini` file at `/usr/local/php/php.ini`.
+
+### Honcho
+
+If you want to overwrite the default Honcho configuration - mount your custom `Procfile` file at `/`.
+
 ## Todo
 
 - Add [HEALTHCHECK](https://docs.docker.com/engine/reference/builder/#/healthcheck)
-- Extend [README.md](./README.md) with configuration (Procfile, nginx.conf...).
 - Add more support for composer in docker entrypoint.
