@@ -1,0 +1,79 @@
+#!/bin/bash
+
+# set -x
+
+TARGET_USER=$1
+TARGET_GROUP=$2
+TARGET_DIR=$3
+
+function get_target_uid() {
+    echo $(stat -c '%u' $TARGET_DIR)
+}
+
+function get_target_gid() {
+    echo $(stat -c '%g' $TARGET_DIR)
+}
+
+function get_current_uid_of() {
+    echo $(getent passwd $1 | cut -d: -f3)
+}
+
+function get_current_username_of() {
+    echo $(getent passwd $1 | cut -d: -f1)
+}
+
+function get_current_gid_of() {
+    echo $(getent group $1 | cut -d: -f3)
+}
+
+function get_current_groupname_of() {
+    echo $(getent group $1 | cut -d: -f1)
+}
+
+# Exist if UID and GID already match
+if [[ get_target_uid -eq $(get_current_uid_of "$TARGET_USER") && get_target_gid -eq $(get_current_gid_of "$TARGET_GROUP") ]]; then
+    # Nothing to do here...
+    exit 0
+fi
+
+# Remove conflicting group if needed
+if [[ $(get_target_gid) -ne $(get_current_gid_of "$TARGET_GROUP") && -z $(get_current_gid_of "$TARGET_GROUP") && $(get_target_gid) -ne 0 ]]; then
+    groupdel $(get_target_gid)
+    if [[ $? -ne 0 ]]; then
+        exit $?
+    fi
+fi
+
+# Remove conflicting user if needed
+if [[ $(get_target_uid) -ne $(get_current_uid_of "$TARGET_USER") && -z $(get_current_uid_of "$TARGET_USER") && $(get_target_uid) -ne 0 ]]; then
+    userdel $(get_target_uid)
+    if [[ $? -ne 0 ]]; then
+        exit $?
+    fi
+fi
+
+# Create target group if needed
+if [[ $TARGET_GROUP != $(get_current_groupname_of "$TARGET_GROUP") ]]; then
+    groupadd -g $(get_target_gid) $TARGET_GROUP
+fi
+
+# Create target user if needed
+if [[ $TARGET_USER != $(get_current_username_of "$TARGET_USER") ]]; then
+    useradd -u $(get_target_uid) $TARGET_USER
+fi
+
+# Modify the GID if needed
+if [[ $(get_target_gid) -ne $(get_current_gid_of "$TARGET_GROUP") ]]; then
+    groupmod -g $(get_target_gid) $TARGET_GROUP
+    if [[ $? -ne 0 ]]; then
+        exit $?
+    fi
+fi
+
+# Modify the UID if needed
+if [[ $(get_target_uid) -ne $(get_current_uid_of "$TARGET_USER") ]]; then
+    usermod -u $(get_target_uid) $TARGET_USER
+    if [[ $? -ne 0 ]]; then
+        exit $?
+    fi
+fi
