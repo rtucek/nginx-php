@@ -1,8 +1,8 @@
 FROM debian:jessie
 
 ENV \
-    NGINX_VERSION=1.11.6 \
-    PHP_VERSION=7.0.13
+    NGINX_VERSION=1.11.7 \
+    PHP_VERSION=7.0.14
 
 COPY \
     docker-entrypoint \
