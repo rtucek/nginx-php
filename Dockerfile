@@ -6,6 +6,7 @@ ENV \
 
 COPY \
     docker-entrypoint \
+    fix-permission \
     nginx.conf \
     Procfile \
     /tmp/build/scripts/
@@ -201,6 +202,8 @@ RUN \
     # Add entrypoint for docker
     mv /tmp/build/scripts/docker-entrypoint / && \
     chmod +x /docker-entrypoint && \
+    mv /tmp/build/scripts/fix-permission / && \
+    chmod +x /fix-permission && \
 
     # Final cleanup
     apt-get remove -y \
