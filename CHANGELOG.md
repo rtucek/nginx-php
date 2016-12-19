@@ -1,3 +1,7 @@
+## TAG v0.1.2 (2016-19-12)
+
+- Fix PHP composer installer.
+
 ## TAG v0.1.1 (2016-18-12)
 
 - Update Nginx to v1.11.7.
