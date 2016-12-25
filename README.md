@@ -1,3 +1,5 @@
+[![](https://images.microbadger.com/badges/image/janus1990/docker-nginx-php:v0.2.0.svg)](https://microbadger.com/images/janus1990/docker-nginx-php:v0.2.0 "Get your own image badge on microbadger.com") [![](https://images.microbadger.com/badges/version/janus1990/docker-nginx-php:v0.2.0.svg)](https://microbadger.com/images/janus1990/docker-nginx-php:v0.2.0 "Get your own version badge on microbadger.com")
+
 ## nginx-php Dockerfile
 
 This repository contains source code of [janus1990/docker-nginx-php](https://hub.docker.com/r/janus1990/docker-nginx-php/).
