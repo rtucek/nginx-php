@@ -1,5 +1,7 @@
 ## Tag v0.2.0 (...)
 
+- Upgrade to PHP v7.1.0
+
 ## TAG v0.1.2 (2016-19-12)
 
 - Fix PHP composer installer.
