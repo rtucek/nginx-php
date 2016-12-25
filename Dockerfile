@@ -2,7 +2,7 @@ FROM debian:jessie
 
 ENV \
     NGINX_VERSION=1.11.7 \
-    PHP_VERSION=7.0.14
+    PHP_VERSION=7.1.0
 
 COPY \
     docker-entrypoint \
@@ -110,10 +110,9 @@ RUN \
 
     cd /tmp/build/php/ && \
 
-    # GPG keys from the release managers of PHP 7.0
-    # Source https://secure.php.net/gpg-keys.php#gpg-7.0
-    gpg --keyserver pgp.mit.edu/ --recv "1A4E 8B72 77C4 2E53 DBA9  C7B9 BCAA 30EA 9C0D 5763" && \
-    gpg --keyserver pgp.mit.edu/ --recv "6E4F 6AB3 21FD C07F 2C33  2E3A C2BF 0BC4 33CF C8B3" && \
+    # GPG keys from the release managers of PHP 7.1
+    # Source https://secure.php.net/downloads.php#gpg-7.1
+    gpg --keyserver pgp.mit.edu/ --recv "A917 B1EC DA84 AEC2 B568 FED6 F50A BC80 7BD5 DCD0" && \
 
     # Verify signature
     curl -SLo php-${PHP_VERSION}.tar.gz.asc http://ch1.php.net/get/php-${PHP_VERSION}.tar.gz.asc/from/this/mirror && \
