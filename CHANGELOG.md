@@ -1,3 +1,5 @@
+## Tag v0.2.0 (...)
+
 ## TAG v0.1.2 (2016-19-12)
 
 - Fix PHP composer installer.
