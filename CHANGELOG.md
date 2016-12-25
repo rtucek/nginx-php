@@ -1,4 +1,4 @@
-## Tag v0.2.0 (...)
+## Tag v0.2.0 (2016-12-25)
 
 - Upgrade to PHP v7.1.0
 - Add badges to README.md (powered by microbadger.com).
