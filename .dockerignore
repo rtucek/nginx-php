@@ -1,4 +1,5 @@
 .editorconfig
+.travis.yml
 CHANGELOG.md
 LICENSE
 Makefile
