@@ -3,7 +3,10 @@ sudo: required
 services:
   - docker
 
+addons:
+  apt:
+    packages:
+    - make
+
 script:
-  - apt-get update
-  - apt-get install -y make
   - make test-build
