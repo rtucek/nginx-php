@@ -1,0 +1,12 @@
+sudo: false
+
+services:
+  - docker
+
+addons:
+  apt:
+    packages:
+    - make
+
+script:
+  - make test-build
