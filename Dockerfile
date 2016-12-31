@@ -2,7 +2,8 @@ FROM debian:jessie
 
 ENV \
     NGINX_VERSION=1.11.7 \
-    PHP_VERSION=7.1.0
+    PHP_VERSION=7.1.0 \
+    XDEBUG_VERSION=2.5.0
 
 COPY \
     docker-entrypoint \
@@ -16,6 +17,7 @@ RUN \
     apt-get update && \
     apt-get install -y --no-install-recommends \
         # In general...
+        autoconf \
         build-essential \
         curl \
 
@@ -152,6 +154,18 @@ RUN \
     make -j$(nproc) build && \
     make install && \
 
+    # Compile Xdebug
+    mkdir -p /tmp/build/xdebug && \
+    cd /tmp/build/xdebug && \
+    curl -SLO \
+        "https://github.com/xdebug/xdebug/archive/XDEBUG_"$(echo ${XDEBUG_VERSION} | sed "s/\./_/g")".tar.gz" && \
+    tar -xvzf "XDEBUG_"$(echo ${XDEBUG_VERSION} | sed "s/\./_/g")".tar.gz" && \
+    cd "xdebug-XDEBUG_"$(echo ${XDEBUG_VERSION} | sed "s/\./_/g") && \
+    phpize && \
+    ./configure && \
+    make && \
+    make install && \
+
     # Fix permissions
     chown -R www-data:www-data /usr/local/nginx/html && \
 
@@ -206,6 +220,7 @@ RUN \
 
     # Final cleanup
     apt-get remove -y \
+        autoconf \
         bison \
         build-essential \
         curl \
@@ -217,37 +232,6 @@ RUN \
 
     rm -rf /var/lib/apt/lists/* && \
     rm -rf /tmp/build
-
-ENV \
-    XDEBUG_VERSION=2.5.0
-
-RUN \
-    # Re-download deps.
-    apt-get update && \
-    apt-get install -y \
-        autoconf \
-        build-essential \
-        curl \
-        less \
-        vim
-
-RUN \
-    # Compile Xdebug
-    mkdir -p /tmp/test && \
-    cd /tmp/test && \
-    curl -SLO \
-        "https://github.com/xdebug/xdebug/archive/XDEBUG_"$(echo ${XDEBUG_VERSION} | sed "s/\./_/g")".tar.gz" && \
-    tar -xvzf "XDEBUG_"$(echo ${XDEBUG_VERSION} | sed "s/\./_/g")".tar.gz" && \
-    cd "xdebug-XDEBUG_"$(echo ${XDEBUG_VERSION} | sed "s/\./_/g") && \
-    phpize && \
-    ./configure && \
-    make && \
-    make install && \
-    cp modules/xdebug.so /usr/local/lib/php/extensions/no-debug-non-zts-20160303
-
-RUN \
-    # Enable Xdebug
-    echo "zend_extension = /usr/local/lib/php/extensions/no-debug-non-zts-20160303/xdebug.so" >> /usr/local/lib/php.ini
 
 # Declare entrypoint
 ENTRYPOINT ["/docker-entrypoint"]
