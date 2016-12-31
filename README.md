@@ -49,4 +49,3 @@ If you want to overwrite the default Honcho configuration - mount your custom `P
 ## Todo
 
 - Add [HEALTHCHECK](https://docs.docker.com/engine/reference/builder/#/healthcheck)
-- Add more support for composer in docker entrypoint.
