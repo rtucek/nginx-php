@@ -1,7 +1,7 @@
 FROM debian:jessie
 
 ENV \
-    NGINX_VERSION=1.11.7 \
+    NGINX_VERSION=1.11.8 \
     PHP_VERSION=7.1.0
 
 COPY \
