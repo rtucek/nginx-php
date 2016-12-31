@@ -1,3 +1,8 @@
+##### Tag v0.3.0 (2016-12-31)
+
+- Add Travis CI - #1
+- Add Xdebug - #2
+
 ##### Tag v0.2.1 (2016-12-31)
 
 - Remove misleading comments - #3
