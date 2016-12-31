@@ -1,3 +1,9 @@
+##### Tag v0.2.1 (2016-12-31)
+
+- Remove misleading comments - #3
+- Add badges and make headings smaller - #4
+- Bump up Nginx to v1.11.8 - #5
+
 ##### Tag v0.2.0 (2016-12-25)
 [![](https://images.microbadger.com/badges/image/janus1990/docker-nginx-php:v0.2.0.svg)](https://microbadger.com/images/janus1990/docker-nginx-php:v0.2.0 "Get your own image badge on microbadger.com") [![](https://images.microbadger.com/badges/version/janus1990/docker-nginx-php:v0.2.0.svg)](https://microbadger.com/images/janus1990/docker-nginx-php:v0.2.0 "Get your own version badge on microbadger.com")
 
