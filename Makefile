@@ -11,3 +11,6 @@ default:	build
 
 build:
 	docker build -t $(IMAGE_FQN) .
+
+test-build:
+	docker build -t testbuild .

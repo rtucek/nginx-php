@@ -1,4 +1,4 @@
-[![](https://images.microbadger.com/badges/image/janus1990/docker-nginx-php.svg)](https://microbadger.com/images/janus1990/docker-nginx-php "Get your own image badge on microbadger.com") [![](https://images.microbadger.com/badges/version/janus1990/docker-nginx-php.svg)](https://microbadger.com/images/janus1990/docker-nginx-php "Get your own version badge on microbadger.com")
+[![Build Status](https://travis-ci.org/rtucek/docker-nginx-php.svg?branch=ci%2Ftravis)](https://travis-ci.org/rtucek/docker-nginx-php) [![](https://images.microbadger.com/badges/image/janus1990/docker-nginx-php.svg)](https://microbadger.com/images/janus1990/docker-nginx-php "Get your own image badge on microbadger.com") [![](https://images.microbadger.com/badges/version/janus1990/docker-nginx-php.svg)](https://microbadger.com/images/janus1990/docker-nginx-php "Get your own version badge on microbadger.com")
 
 ## nginx-php Dockerfile
 
@@ -9,6 +9,9 @@ This repository contains source code of [janus1990/docker-nginx-php](https://hub
 Nginx and PHP are compiled in a specific version. Consult the [CHANGELOG.md](./CHANGELOG.md) file
 for further version details. [PHP Composer](https://getcomposer.org/) is already installed and ready
 for use.
+
+Xdebug is installed as shared extension, but not activated. Start the container with env
+ENABLE_XDEBUG=1 to enable the extension.
 
 The Nginx and PHP-FPM master processes are controlled by [Honcho](https://github.com/nickstenning/honcho).
 Honcho was chosen over Supervisor, because honcho will exit and kill the container if either Nginx
@@ -41,6 +44,12 @@ Mount your custom `nginx.conf` file at `/usr/local/nginx/conf/nginx.conf`.
 * Mount your custom `php-fpm.conf` file at `/usr/local/etc/php-fpm.conf`.
 * Mount your custom `www.conf` file at `/usr/local/etc/www.conf`.
 * Mount your custom `php.ini` file at `/usr/local/php/php.ini`.
+
+### Xdebug
+
+Xdebug was installed mainly with the idea of providing code coverage for PHPUnit. Thus it's not
+configured for any specific use case. You can [configure Xdebug](https://xdebug.org/docs/all) via
+`php.ini` if desired.
 
 ### Honcho
 
