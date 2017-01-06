@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/rtucek/nginx-php.svg?branch=master)](https://travis-ci.org/rtucek/nginx-php) [![](https://images.microbadger.com/badges/image/janus1990/docker-nginx-php.svg)](https://microbadger.com/images/janus1990/docker-nginx-php "Get your own image badge on microbadger.com") [![](https://images.microbadger.com/badges/version/janus1990/docker-nginx-php.svg)](https://microbadger.com/images/janus1990/docker-nginx-php "Get your own version badge on microbadger.com")
+[![Build Status](https://travis-ci.org/rtucek/nginx-php.svg?branch=master)](https://travis-ci.org/rtucek/nginx-php) [![](https://images.microbadger.com/badges/image/rtucek/nginx-php.svg)](https://microbadger.com/images/rtucek/nginx-php "Get your own image badge on microbadger.com") [![](https://images.microbadger.com/badges/version/rtucek/nginx-php.svg)](https://microbadger.com/images/rtucek/nginx-php "Get your own version badge on microbadger.com")
 
 ## nginx-php Dockerfile
 
