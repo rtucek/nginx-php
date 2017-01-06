@@ -1,4 +1,7 @@
-##### Tag v0.3.0 (2016-12-31)
+##### Tag v0.3.1 (2017-XX-XX)
+
+- Rename image
+- Update badges
 
 ##### Tag v0.3.0 (2016-12-31)
 [![](https://images.microbadger.com/badges/image/rtucek/nginx-php:v0.3.0.svg)](https://microbadger.com/images/rtucek/nginx-php:v0.3.0 "Get your own image badge on microbadger.com") [![](https://images.microbadger.com/badges/version/rtucek/nginx-php:v0.3.0.svg)](https://microbadger.com/images/rtucek/nginx-php:v0.3.0 "Get your own version badge on microbadger.com")
