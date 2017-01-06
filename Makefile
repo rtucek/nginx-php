@@ -1,6 +1,6 @@
-REPO = janus1990
-IMAGE = docker-nginx-php
-VERSION = 0.3.0
+REPO = rtucek
+IMAGE = nginx-php
+VERSION = 0.3.1
 EXTRAVERSION =
 
 IMAGE_FQN = $(REPO)/$(IMAGE):v$(VERSION)$(EXTRAVERSION)
