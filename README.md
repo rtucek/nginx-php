@@ -2,7 +2,7 @@
 
 ## nginx-php Dockerfile
 
-This repository contains source code of [janus1990/docker-nginx-php](https://hub.docker.com/r/janus1990/docker-nginx-php/).
+This repository contains source code of [rtucek/nginx-php](https://hub.docker.com/r/rtucek/nginx-php).
 
 ## Content
 
@@ -22,10 +22,10 @@ automatically, you may want to use
 ## Usage
 
 ```bash
-docker run -v /path/to/php/source/:/usr/local/nginx/html/ janus1990/docker-nginx-php
+docker run -v /path/to/php/source/:/usr/local/nginx/html/ rtucek/nginx-php
 
 # With restart policy
-docker run --restart=always -v /path/to/php/source/:/usr/local/nginx/html/ janus1990/docker-nginx-php
+docker run --restart=always -v /path/to/php/source/:/usr/local/nginx/html/ rtucek/nginx-php
 ```
 
 ## Advanced configuration
@@ -37,7 +37,7 @@ PHP related configuration files.
 
 Mount your custom `nginx.conf` file at `/usr/local/nginx/conf/nginx.conf`.
 
-`docker run -v /path/to/nginx.conf:/usr/local/nginx/conf/nginx.conf ... janus1990/docker-nginx-php`
+`docker run -v /path/to/nginx.conf:/usr/local/nginx/conf/nginx.conf ... rtucek/nginx-php`
 
 ### PHP & PHP-FPM
 

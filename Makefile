@@ -1,5 +1,5 @@
-REPO = janus1990
-IMAGE = docker-nginx-php
+REPO = rtucek
+IMAGE = nginx-php
 VERSION = 0.3.0
 EXTRAVERSION =
 
