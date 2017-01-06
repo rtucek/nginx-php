@@ -1,4 +1,4 @@
-##### Tag v0.3.1 (2017-XX-XX)
+##### Tag v0.3.1 (2017-01-06)
 
 - Rename image
 - Update badges
