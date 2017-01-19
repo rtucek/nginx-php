@@ -1,3 +1,9 @@
+##### Tag v0.3.2 (2017-01-19)
+
+- Add quay.io badges
+- Upgrade PHP to v7.1.1
+- Add 2nd GPG key from the PHP v7.1.x release managers (Joe Watkins <krakjoe@php.net>)
+
 ##### Tag v0.3.1 (2017-01-06)
 
 - Rename image
