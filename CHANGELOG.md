@@ -1,4 +1,5 @@
 ##### Tag v0.3.2 (2017-01-19)
+[![](https://images.microbadger.com/badges/image/rtucek/nginx-php:v0.3.2.svg)](https://microbadger.com/images/rtucek/nginx-php:v0.3.2 "Get your own image badge on microbadger.com") [![](https://images.microbadger.com/badges/version/rtucek/nginx-php:v0.3.2.svg)](https://microbadger.com/images/rtucek/nginx-php:v0.3.2 "Get your own version badge on microbadger.com")
 
 - Add quay.io badges
 - Upgrade PHP to v7.1.1
