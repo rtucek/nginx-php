@@ -1,10 +1,12 @@
 ##### Tag v0.3.1 (2017-01-06)
+[![](https://images.microbadger.com/badges/image/rtucek/nginx-php:v0.3.1.svg)](https://microbadger.com/images/rtucek/nginx-php:v0.3.1 "Get your own image badge on microbadger.com") [![](https://images.microbadger.com/badges/version/rtucek/nginx-php:v0.3.1.svg)](https://microbadger.com/images/rtucek/nginx-php:v0.3.1 "Get your own version badge on microbadger.com")
 
 - Rename image
 - Update badges
 
 ##### Tag v0.3.0 (2016-12-31)
 [![](https://images.microbadger.com/badges/image/rtucek/nginx-php:v0.3.0.svg)](https://microbadger.com/images/rtucek/nginx-php:v0.3.0 "Get your own image badge on microbadger.com") [![](https://images.microbadger.com/badges/version/rtucek/nginx-php:v0.3.0.svg)](https://microbadger.com/images/rtucek/nginx-php:v0.3.0 "Get your own version badge on microbadger.com")
+
 - Add Travis CI - #1
 - Add Xdebug - #2
 
