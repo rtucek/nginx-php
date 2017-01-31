@@ -1,7 +1,7 @@
 FROM debian:jessie
 
 ENV \
-    NGINX_VERSION=1.11.8 \
+    NGINX_VERSION=1.11.9 \
     PHP_VERSION=7.1.0 \
     XDEBUG_VERSION=2.5.0
 
