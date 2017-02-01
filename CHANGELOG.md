@@ -1,3 +1,8 @@
+##### Tag v0.3.3 (2017-02-01)
+[![](https://images.microbadger.com/badges/image/rtucek/nginx-php:v0.3.3.svg)](https://microbadger.com/images/rtucek/nginx-php:v0.3.3 "Get your own image badge on microbadger.com") [![](https://images.microbadger.com/badges/version/rtucek/nginx-php:v0.3.3.svg)](https://microbadger.com/images/rtucek/nginx-php:v0.3.3 "Get your own version badge on microbadger.com")
+
+- Upgrade Nginx to v1.11.9
+
 ##### Tag v0.3.2 (2017-01-19)
 [![](https://images.microbadger.com/badges/image/rtucek/nginx-php:v0.3.2.svg)](https://microbadger.com/images/rtucek/nginx-php:v0.3.2 "Get your own image badge on microbadger.com") [![](https://images.microbadger.com/badges/version/rtucek/nginx-php:v0.3.2.svg)](https://microbadger.com/images/rtucek/nginx-php:v0.3.2 "Get your own version badge on microbadger.com")
 
