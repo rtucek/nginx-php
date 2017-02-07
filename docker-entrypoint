@@ -18,8 +18,14 @@ fi
 # Enable Xdebug
 # Use Xdebug if ENABLE_XDEBUG env is set to 1.
 if [[ $ENABLE_XDEBUG == "1" ]]; then
+    # Check if Xdebug extension is already enabled
+    touch /usr/local/lib/php.ini
+    grep -xq 'zend_extension\s*=\s*/usr/local/lib/php/extensions/no-debug-non-zts-20160303/xdebug.so' /usr/local/lib/php.ini
+    if [[ $? != "0" ]]; then
+        echo "zend_extension = /usr/local/lib/php/extensions/no-debug-non-zts-20160303/xdebug.so" >> /usr/local/lib/php.ini
+    fi
+
     echo -e "\e[32mXdebug enabled\e[0m"
-    echo "zend_extension = /usr/local/lib/php/extensions/no-debug-non-zts-20160303/xdebug.so" >> /usr/local/lib/php.ini
 fi
 
 if [[ $1 == "server" ]]; then
