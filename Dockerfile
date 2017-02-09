@@ -114,8 +114,9 @@ RUN \
 
     # GPG keys from the release managers of PHP 7.1
     # Source https://secure.php.net/downloads.php#gpg-7.1
-    gpg --keyserver pgp.mit.edu/ --recv "A917 B1EC DA84 AEC2 B568 FED6 F50A BC80 7BD5 DCD0" && \
-    gpg --keyserver pgp.mit.edu/ --recv "5289 95BF EDFB A719 1D46 839E F9BA 0ADA 31CB D89E" && \
+    gpg --keyserver sks-keyservers.net --recv-keys \
+        "A917 B1EC DA84 AEC2 B568 FED6 F50A BC80 7BD5 DCD0" \
+        "5289 95BF EDFB A719 1D46 839E F9BA 0ADA 31CB D89E" && \
 
     # Verify signature
     curl -SLo php-${PHP_VERSION}.tar.gz.asc http://ch1.php.net/get/php-${PHP_VERSION}.tar.gz.asc/from/this/mirror && \
