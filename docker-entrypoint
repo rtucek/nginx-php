@@ -22,6 +22,14 @@ if [[ $ENABLE_XDEBUG == "1" ]]; then
     echo "zend_extension = /usr/local/lib/php/extensions/no-debug-non-zts-20160303/xdebug.so" >> /usr/local/lib/php.ini
 fi
 
+# Deploy available crontabs
+if [[ -d /crontab ]]; then
+    for crontab_file in $(ls /crontab); do
+        crontab -u $crontab_file /crontab/$crontab_file
+    done
+fi
+
+# Start Honcho
 if [[ $1 == "server" ]]; then
     exec honcho -d / start
 fi

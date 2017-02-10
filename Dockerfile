@@ -16,7 +16,7 @@ RUN \
     # Install tools, required for building
     apt-get update && \
     apt-get install -y --no-install-recommends \
-        # In general...
+        # For building (will be removed)
         autoconf \
         build-essential \
         curl \
@@ -43,7 +43,10 @@ RUN \
         # For Honcho
         python \
         python-pip \
-        python-pkg-resources && \
+        python-pkg-resources \
+
+        # Fron crontab
+        cron && \
 
     pip install honcho && \
 
