@@ -1,9 +1,22 @@
 FROM debian:jessie
 
+ARG BUILD_DATE
+ARG VCS_REF
+ARG VERSION
+
+LABEL \
+    org.label-schema.build-date=${BUILD_DATE} \
+    org.label-schema.name="nginx-php Dockerfile" \
+    org.label-schema.schema-version="1.0" \
+    org.label-schema.vcs-ref=${VCS_REF} \
+    org.label-schema.vcs-url="https://github.com/rtucek/nginx-php" \
+    org.label-schema.version=${VERSION}
+
 ENV \
     NGINX_VERSION=1.11.9 \
     PHP_VERSION=7.1.1 \
-    XDEBUG_VERSION=2.5.0
+    XDEBUG_VERSION=2.5.0 \
+    VERSION=${VERSION}
 
 COPY \
     docker-entrypoint \
