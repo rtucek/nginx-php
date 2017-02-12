@@ -1,4 +1,5 @@
 ##### Tag v0.3.4 (2017-02-07)
+[![](https://images.microbadger.com/badges/image/rtucek/nginx-php:v0.3.4.svg)](https://microbadger.com/images/rtucek/nginx-php:v0.3.4 "Get your own image badge on microbadger.com") [![](https://images.microbadger.com/badges/version/rtucek/nginx-php:v0.3.4.svg)](https://microbadger.com/images/rtucek/nginx-php:v0.3.4 "Get your own version badge on microbadger.com")
 
 - Fix reload Xdebug extension to be load by PHP as often as the container was restarted
 
