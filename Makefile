@@ -18,9 +18,9 @@ build:
 		--build-arg VERSION=$(IMAGE_VERSION) \
 		-t $(IMAGE_FQN) .
 
-test-build:
+travis-build:
 	@docker build \
-		--build-arg VCS_REF=`git rev-parse --short HEAD` \
+		--build-arg VCS_REF=$(TRAVIS_COMMIT) \
 		--build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"` \
 		--build-arg VERSION=$(IMAGE_VERSION) \
-		-t $(IMAGE_NAME):testbuild .
+		-t $(IMAGE_NAME):travis-build .
