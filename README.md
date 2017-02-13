@@ -6,9 +6,10 @@ This repository contains source code of [rtucek/nginx-php](https://hub.docker.co
 
 ## Content
 
-Nginx and PHP are compiled in a specific version. Consult the [CHANGELOG.md](./CHANGELOG.md) file
-for further version details. [PHP Composer](https://getcomposer.org/) is already installed and ready
-for use.
+Nginx and PHP are compiled in a specific version. Consult the
+[CHANGELOG.md](https://github.com/rtucek/nginx-php/blob/master/CHANGELOG.md)
+file for further version details. [PHP Composer](https://getcomposer.org/) is
+already installed and ready for use.
 
 Xdebug is installed as shared extension, but not activated. Start the container with env
 ENABLE_XDEBUG=1 to enable the extension.
