@@ -9,4 +9,4 @@ addons:
     - make
 
 script:
-  - make test-build
+  - make travis-build
