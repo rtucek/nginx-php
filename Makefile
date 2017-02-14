@@ -16,7 +16,7 @@ build:
 		--build-arg VCS_REF=`git rev-parse --short HEAD` \
 		--build-arg BUILD_DATE=`date -u +"%Y-%m-%dT%H:%M:%SZ"` \
 		--build-arg VERSION=$(IMAGE_VERSION) \
-		-t $(IMAGE_FQN) .
+		-t $(IMAGE_NAME):local-build .
 
 travis-build:
 	@docker build \
