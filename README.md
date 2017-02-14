@@ -2,22 +2,26 @@
 
 ## nginx-php Dockerfile
 
-This repository contains source code of [rtucek/nginx-php](https://hub.docker.com/r/rtucek/nginx-php).
+This repository contains source code of
+[rtucek/nginx-php](https://hub.docker.com/r/rtucek/nginx-php).
 
 ## Content
 
-Nginx and PHP are compiled in a specific version. Consult the [CHANGELOG.md](./CHANGELOG.md) file
-for further version details. [PHP Composer](https://getcomposer.org/) is already installed and ready
-for use.
+Nginx and PHP are compiled in a specific version. Consult the
+[CHANGELOG.md](https://github.com/rtucek/nginx-php/blob/master/CHANGELOG.md)
+file for further version details. [PHP Composer](https://getcomposer.org/) is
+already installed and ready for use.
 
-Xdebug is installed as shared extension, but not activated. Start the container with env
-ENABLE_XDEBUG=1 to enable the extension.
+Xdebug is installed as shared extension, but not activated. Start the container
+with env ENABLE_XDEBUG=1 to enable the extension.
 
-The Nginx and PHP-FPM master processes are controlled by [Honcho](https://github.com/nickstenning/honcho).
-Honcho was chosen over Supervisor, because honcho will exit and kill the container if either Nginx
-or PHP's master process dye for any reason. If you want have to have the container restarted
-automatically, you may want to use
-[Docker's restart](https://docs.docker.com/engine/reference/run/#restart-policies---restart) policy.
+The Nginx and PHP-FPM master processes are controlled by
+[Honcho](https://github.com/nickstenning/honcho). Honcho was chosen over
+Supervisor, because honcho will exit and kill the container if either Nginx or
+PHP's master process dye for any reason. If you want have to have the container
+restarted automatically, you may want to use
+[Docker's restart](https://docs.docker.com/engine/reference/run/#restart-policies---restart)
+policy.
 
 ## Usage
 
@@ -30,8 +34,8 @@ docker run --restart=always -v /path/to/php/source/:/usr/local/nginx/html/ rtuce
 
 ## Advanced configuration
 
-You by default, the image is configured to work out of the box, however you may add your own Nginx or
-PHP related configuration files.
+You by default, the image is configured to work out of the box, however you may
+add your own Nginx or PHP related configuration files.
 
 ### Nginx
 
@@ -47,9 +51,9 @@ Mount your custom `nginx.conf` file at `/usr/local/nginx/conf/nginx.conf`.
 
 ### Xdebug
 
-Xdebug was installed mainly with the idea of providing code coverage for PHPUnit. Thus it's not
-configured for any specific use case. You can [configure Xdebug](https://xdebug.org/docs/all) via
-`php.ini` if desired.
+Xdebug was installed mainly with the idea of providing code coverage for
+PHPUnit. Thus it's not configured for any specific use case. You can
+[configure Xdebug](https://xdebug.org/docs/all) via `php.ini` if desired.
 
 ### Crontab
 
@@ -65,7 +69,8 @@ whenever possible).
 
 ### Honcho
 
-If you want to overwrite the default Honcho configuration - mount your custom `Procfile` file at `/`.
+If you want to overwrite the default Honcho configuration - mount your custom
+`Procfile` file at `/`.
 
 ## Todo
 
