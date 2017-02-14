@@ -1,9 +1,22 @@
 FROM debian:jessie
 
+ARG BUILD_DATE
+ARG VCS_REF
+ARG VERSION
+
+LABEL \
+    org.label-schema.build-date=${BUILD_DATE} \
+    org.label-schema.name="nginx-php Dockerfile" \
+    org.label-schema.schema-version="1.0" \
+    org.label-schema.vcs-ref=${VCS_REF} \
+    org.label-schema.vcs-url="https://github.com/rtucek/nginx-php" \
+    org.label-schema.version=${VERSION}
+
 ENV \
     NGINX_VERSION=1.11.9 \
     PHP_VERSION=7.1.1 \
-    XDEBUG_VERSION=2.5.0
+    XDEBUG_VERSION=2.5.0 \
+    VERSION=${VERSION}
 
 COPY \
     docker-entrypoint \
@@ -16,7 +29,7 @@ RUN \
     # Install tools, required for building
     apt-get update && \
     apt-get install -y --no-install-recommends \
-        # In general...
+        # For building (will be removed)
         autoconf \
         build-essential \
         curl \
@@ -43,7 +56,10 @@ RUN \
         # For Honcho
         python \
         python-pip \
-        python-pkg-resources && \
+        python-pkg-resources \
+
+        # Fron crontab
+        cron && \
 
     pip install honcho && \
 
@@ -60,18 +76,13 @@ RUN \
 
     # GPG keys from the main maintainers of Nginx
     # Source https://nginx.org/en/pgp_keys.html
-    curl -SLO https://nginx.org/keys/nginx_signing.key && \
-    gpg --import nginx_signing.key && \
-    curl -SLO https://nginx.org/keys/aalexeev.key && \
-    gpg --import aalexeev.key && \
-    curl -SLO https://nginx.org/keys/is.key && \
-    gpg --import is.key && \
-    curl -SLO https://nginx.org/keys/mdounin.key && \
-    gpg --import mdounin.key && \
-    curl -SLO https://nginx.org/keys/maxim.key && \
-    gpg --import maxim.key && \
-    curl -SLO https://nginx.org/keys/sb.key && \
-    gpg --import sb.key && \
+    gpg --keyserver sks-keyservers.net --recv-keys \
+        "6550 6C02 EFC2 50F1 B7A3  D694 ECF0 E90B 2C17 2083" \
+        "4C2C 85E7 05DC 7308 3399  0C38 A937 6139 A524 C53E" \
+        "B0F4 2533 73F8 F6F5 10D4  2178 520A 9993 A1C0 52F8" \
+        "7338 9730 69ED 3F44 3F4D  37DF A64F D5B1 7ADB 39A8" \
+        "A09C D539 B8BB 8CBE 96E8  2BDF ABD4 D3B3 F580 6B4D" \
+        "573B FD6B 3D8F BC64 1079  A6AB ABF5 BD82 7BD9 BF62" && \
 
     # Verify signature
     curl -SLO https://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz.asc && \
@@ -114,8 +125,9 @@ RUN \
 
     # GPG keys from the release managers of PHP 7.1
     # Source https://secure.php.net/downloads.php#gpg-7.1
-    gpg --keyserver pgp.mit.edu/ --recv "A917 B1EC DA84 AEC2 B568 FED6 F50A BC80 7BD5 DCD0" && \
-    gpg --keyserver pgp.mit.edu/ --recv "5289 95BF EDFB A719 1D46 839E F9BA 0ADA 31CB D89E" && \
+    gpg --keyserver sks-keyservers.net --recv-keys \
+        "A917 B1EC DA84 AEC2 B568 FED6 F50A BC80 7BD5 DCD0" \
+        "5289 95BF EDFB A719 1D46 839E F9BA 0ADA 31CB D89E" && \
 
     # Verify signature
     curl -SLo php-${PHP_VERSION}.tar.gz.asc http://ch1.php.net/get/php-${PHP_VERSION}.tar.gz.asc/from/this/mirror && \

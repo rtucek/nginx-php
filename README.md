@@ -51,6 +51,18 @@ Xdebug was installed mainly with the idea of providing code coverage for PHPUnit
 configured for any specific use case. You can [configure Xdebug](https://xdebug.org/docs/all) via
 `php.ini` if desired.
 
+### Crontab
+
+Crontab is already installed. In order to deploy a crontab file, you would need
+to store a valid crontab file to `/crontab/USERNAME`, where `USERNAME` has to
+be an **existing** user. This is important, because any contrab instructions
+will be executed as the user, specified by the filename.
+
+Usually, you would like to run all your crontab instructions as **www-data**.
+So you should mount your crontab file to `/crontab/www-data` (or under
+`/crontab/root` if needed - needless to say you should try to avoid this
+whenever possible).
+
 ### Honcho
 
 If you want to overwrite the default Honcho configuration - mount your custom `Procfile` file at `/`.
