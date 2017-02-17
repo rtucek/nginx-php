@@ -13,7 +13,7 @@ LABEL \
     org.label-schema.version=${VERSION}
 
 ENV \
-    NGINX_VERSION=1.11.9 \
+    NGINX_VERSION=1.11.10 \
     PHP_VERSION=7.1.2 \
     XDEBUG_VERSION=2.5.0 \
     VERSION=${VERSION}
