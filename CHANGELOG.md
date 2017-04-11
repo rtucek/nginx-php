@@ -1,4 +1,5 @@
 ##### Tag v0.4.1 (2017-03-28)
+[![](https://images.microbadger.com/badges/image/rtucek/nginx-php:v0.4.1.svg)](https://microbadger.com/images/rtucek/nginx-php:v0.4.1 "Get your own image badge on microbadger.com") [![](https://images.microbadger.com/badges/version/rtucek/nginx-php:v0.4.1.svg)](https://microbadger.com/images/rtucek/nginx-php:v0.4.1 "Get your own version badge on microbadger.com") [![](https://images.microbadger.com/badges/commit/rtucek/nginx-php:v0.4.1.svg)](https://microbadger.com/images/rtucek/nginx-php:v0.4.1 "Get your own commit badge on microbadger.com")
 
 - Bump PHP to v7.1.3
 - Bump Nginx version to v1.11.11
