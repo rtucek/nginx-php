@@ -12,32 +12,32 @@
 # However, this blocks starting the initial process IF you have a bad or no Internet connection at
 # all. To avoid this, you can start the container with SKIP_COMPOSER_UPDATE env set to 1.
 if [[ $SKIP_COMPOSER_UPDATE != "1" ]]; then
-    composer selfupdate -vvvn
+	composer selfupdate -vvvn
 fi
 
 # Enable Xdebug
 # Use Xdebug if ENABLE_XDEBUG env is set to 1.
 if [[ $ENABLE_XDEBUG == "1" ]]; then
-    # Check if Xdebug extension is already enabled
-    touch /usr/local/lib/php.ini
-    grep -xq 'zend_extension\s*=\s*/usr/local/lib/php/extensions/no-debug-non-zts-20160303/xdebug.so' /usr/local/lib/php.ini
-    if [[ $? != "0" ]]; then
-        echo "zend_extension = /usr/local/lib/php/extensions/no-debug-non-zts-20160303/xdebug.so" >> /usr/local/lib/php.ini
-    fi
+	# Check if Xdebug extension is already enabled
+	touch /usr/local/lib/php.ini
+	grep -xq 'zend_extension\s*=\s*/usr/local/lib/php/extensions/no-debug-non-zts-20160303/xdebug.so' /usr/local/lib/php.ini
+	if [[ $? != "0" ]]; then
+		echo "zend_extension = /usr/local/lib/php/extensions/no-debug-non-zts-20160303/xdebug.so" >> /usr/local/lib/php.ini
+	fi
 
-    echo -e "\e[32mXdebug enabled\e[0m"
+	echo -e "\e[32mXdebug enabled\e[0m"
 fi
 
 # Deploy available crontabs
 if [[ -d /crontab ]]; then
-    for crontab_file in $(ls /crontab); do
-        crontab -u $crontab_file /crontab/$crontab_file
-    done
+	for crontab_file in $(ls /crontab); do
+		crontab -u $crontab_file /crontab/$crontab_file
+	done
 fi
 
 # Start Honcho
 if [[ $1 == "server" ]]; then
-    exec honcho -d / start
+	exec honcho -d / start
 fi
 
 exec "$@"
