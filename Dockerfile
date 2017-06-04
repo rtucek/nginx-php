@@ -142,11 +142,9 @@ RUN \
 	./configure \
 		--enable-fpm \
 		--enable-mbregex \
-		--enable-mbstring \
 		--enable-mbstring=all \
 		--enable-opcache \
 		--enable-sockets \
-		--enable-zip \
 		--enable-zip \
 		--with-bz2 \
 		--with-curl \
