@@ -13,7 +13,7 @@ LABEL \
 	org.label-schema.version=${VERSION}
 
 ENV \
-	NGINX_VERSION=1.13.0 \
+	NGINX_VERSION=1.13.1 \
 	PHP_VERSION=7.1.6 \
 	XDEBUG_VERSION=2.5.4 \
 	VERSION=${VERSION}
@@ -142,11 +142,9 @@ RUN \
 	./configure \
 		--enable-fpm \
 		--enable-mbregex \
-		--enable-mbstring \
 		--enable-mbstring=all \
 		--enable-opcache \
 		--enable-sockets \
-		--enable-zip \
 		--enable-zip \
 		--with-bz2 \
 		--with-curl \
