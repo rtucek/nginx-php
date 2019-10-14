@@ -19,6 +19,7 @@ RUN \
 		bison \
 		libbz2-dev \
 		libcurl4-openssl-dev \
+		libldap2-dev \
 		libpng-dev \
 		libpq-dev \
 		libreadline-dev \
@@ -67,6 +68,7 @@ RUN \
 		--with-fpm-user=www-data \
 		--with-gd \
 		--with-gettext \
+		--with-ldap \
 		--with-openssl \
 		--with-pcre-regex \
 		--with-pdo-mysql \
