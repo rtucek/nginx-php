@@ -60,6 +60,7 @@ RUN \
 		--enable-mbregex \
 		--enable-mbstring=all \
 		--enable-opcache \
+		--enable-soap \
 		--enable-sockets \
 		--enable-zip \
 		--with-bz2 \
