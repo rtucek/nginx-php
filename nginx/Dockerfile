@@ -4,8 +4,9 @@ ENV \
 	NGINX_VERSION=1.16.1
 
 RUN \
-	apt-get update && \
-	apt-get install -y \
+	apt update && \
+	apt upgrade -y && \
+	apt install -y \
 		# General build dependencies
 		autoconf \
 		build-essential \

@@ -4,8 +4,9 @@ ENV \
 	PHP_VERSION=7.3.10
 
 RUN \
-	apt-get update && \
-	apt-get install -y \
+	apt update && \
+	apt upgrade -y && \
+	apt install -y \
 		# General build dependencies
 		autoconf \
 		build-essential \
