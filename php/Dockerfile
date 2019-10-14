@@ -53,6 +53,7 @@ RUN \
 	# Run configuration
 	cd /tmp/php/php-${PHP_VERSION} && \
 	./configure \
+		--enable-bcmath \
 		--enable-fpm \
 		--enable-mbregex \
 		--enable-mbstring=all \
