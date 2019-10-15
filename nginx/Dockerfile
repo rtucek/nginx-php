@@ -25,7 +25,10 @@ RUN \
 	cd /tmp/nginx && \
 
 	# Download Nginx
-	curl -SLO https://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz && \
+	curl -SLO https://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz
+
+RUN \
+	cd /tmp/nginx && \
 
 	# GPG keys from the main maintainers of Nginx
 	# Source https://nginx.org/en/pgp_keys.html
@@ -58,7 +61,10 @@ RUN \
 		--with-http_v2_module \
 		--with-pcre \
 		--with-threads && \
-	make -j$(nproc) build && \
+	make -j$(nproc) build
+
+RUN \
+	cd /tmp/nginx/nginx-${NGINX_VERSION} && \
 	make -j$(nproc) install
 
 CMD ["/usr/local/nginx/sbin/nginx", "-g", "daemon off;"]

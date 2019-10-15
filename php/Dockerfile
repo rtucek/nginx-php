@@ -35,7 +35,10 @@ RUN \
 	cd /tmp/php && \
 
 	# Download PHP
-	curl -SLo php-${PHP_VERSION}.tar.gz http://ch1.php.net/get/php-${PHP_VERSION}.tar.gz/from/this/mirror && \
+	curl -SLo php-${PHP_VERSION}.tar.gz http://ch1.php.net/get/php-${PHP_VERSION}.tar.gz/from/this/mirror
+
+RUN \
+	cd /tmp/php && \
 
 	# GPG keys from the release managers of PHP 7.3
 	# Source  https://www.php.net/downloads.php#gpg-7.3
@@ -79,8 +82,7 @@ RUN \
 		--with-zlib && \
 
 	# Compile
-	make -j$(nproc) && \
-	make -j$(nproc) build
+	make -j$(nproc)
 
 # RUN \
 #         # Test
