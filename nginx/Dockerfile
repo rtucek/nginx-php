@@ -67,4 +67,7 @@ RUN \
 	cd /tmp/nginx/nginx-${NGINX_VERSION} && \
 	make -j$(nproc) install
 
+EXPOSE 80
+EXPOSE 443
+
 CMD ["/usr/local/nginx/sbin/nginx", "-g", "daemon off;"]

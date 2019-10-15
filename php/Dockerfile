@@ -94,4 +94,6 @@ RUN \
 	cd /tmp/php/php-${PHP_VERSION} && \
 	make -j$(nproc) install
 
+EXPOSE 9000
+
 CMD ["/usr/local/bin/php", "-a"]
