@@ -16,17 +16,16 @@ RUN \
 		# Nginx dependencies
 		libghc-zlib-dev \
 		libpcre3-dev \
-		libssl-dev
+		libssl-dev && \
 
-RUN \
+	# Remember these packages above so we can remove them later
+	apt-mark showmanual > /tmp/remove.txt && \
+
 	mkdir -p /tmp/nginx/ && \
 	cd /tmp/nginx && \
 
 	# Download Nginx
-	curl -SLO https://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz
-
-RUN \
-	cd /tmp/nginx && \
+	curl -SLO https://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz && \
 
 	# GPG keys from the main maintainers of Nginx
 	# Source https://nginx.org/en/pgp_keys.html
@@ -40,11 +39,10 @@ RUN \
 
 	# Verify signature
 	curl -SLO https://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz.asc && \
-	gpg nginx-${NGINX_VERSION}.tar.gz.asc
+	gpg nginx-${NGINX_VERSION}.tar.gz.asc && \
 
-RUN \
 	# Unpack tarball
-	tar -xvzf /tmp/nginx/nginx-${NGINX_VERSION}.tar.gz -C /tmp/nginx && \
+	tar -xvzf /tmp/nginx/nginx-${NGINX_VERSION}.tar.gz && \
 
 	# Compile
 	cd /tmp/nginx/nginx-${NGINX_VERSION} && \
@@ -59,11 +57,16 @@ RUN \
 		--with-http_v2_module \
 		--with-pcre \
 		--with-threads && \
-	make -j$(nproc) build
 
-RUN \
-	cd /tmp/nginx/nginx-${NGINX_VERSION} && \
-	make -j$(nproc) install
+	make -j$(nproc) build && \
+	make -j$(nproc) install && \
+
+	# Cleanup
+	cat /tmp/remove.txt | xargs apt-mark auto && \
+	apt remove -y --auto-remove --purge && \
+	rm -rf /var/lib/apt/lists/* && \
+	rm -rf /tmp/remove.txt && \
+	rm -rf /tmp/nginx
 
 EXPOSE 80
 EXPOSE 443

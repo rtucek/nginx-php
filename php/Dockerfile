@@ -18,27 +18,29 @@ RUN \
 		pkg-config \
 		re2c \
 
-		# PHP dependencies
+		# PHP static dependencies
 		libbz2-dev \
-		libcurl4-openssl-dev \
 		libldap2-dev \
+		libssl-dev \
+		libxml2-dev && \
+
+	# Remember these packages above so we can remove them later
+	apt-mark showmanual > /tmp/remove.txt && \
+
+	apt install -y --no-install-recommends --no-install-suggests \
+		# PHP dependencies
+		libcurl4-openssl-dev \
 		libpng-dev \
 		libpq-dev \
 		libreadline-dev \
-		libssl-dev \
-		libxml2-dev \
 		libxslt1-dev \
-		libzip-dev
+		libzip-dev && \
 
-RUN \
 	mkdir -p /tmp/php/ && \
 	cd /tmp/php && \
 
 	# Download PHP
-	curl -SLo php-${PHP_VERSION}.tar.gz http://ch1.php.net/get/php-${PHP_VERSION}.tar.gz/from/this/mirror
-
-RUN \
-	cd /tmp/php && \
+	curl -SLo php-${PHP_VERSION}.tar.gz http://ch1.php.net/get/php-${PHP_VERSION}.tar.gz/from/this/mirror && \
 
 	# GPG keys from the release managers of PHP 7.3
 	# Source  https://www.php.net/downloads.php#gpg-7.3
@@ -49,16 +51,14 @@ RUN \
 
 	# Verify signature
 	curl -SLo php-${PHP_VERSION}.tar.gz.asc http://ch1.php.net/get/php-${PHP_VERSION}.tar.gz.asc/from/this/mirror && \
-	gpg php-${PHP_VERSION}.tar.gz.asc
+	gpg php-${PHP_VERSION}.tar.gz.asc && \
 
-RUN \
 	# Unpack tarball
-	tar -xvzf /tmp/php/php-${PHP_VERSION}.tar.gz -C /tmp/php && \
+	tar -xvzf /tmp/php/php-${PHP_VERSION}.tar.gz && \
 
 	# Run configuration
 	cd /tmp/php/php-${PHP_VERSION} && \
 	./configure \
-		--prefix=/usr/local/php/ \
 		--enable-bcmath \
 		--enable-fpm \
 		--enable-mbregex \
@@ -67,6 +67,7 @@ RUN \
 		--enable-soap \
 		--enable-sockets \
 		--enable-zip \
+		--prefix=/usr/local/php/ \
 		--with-bz2 \
 		--with-curl \
 		--with-fpm-group=www-data \
@@ -83,19 +84,22 @@ RUN \
 		--with-zlib && \
 
 	# Compile
-	make -j$(nproc)
+	make -j$(nproc) && \
 
-# RUN \
-#         # Test
-#         cd /tmp/php/php-${PHP_VERSION} && \
-#         make -j$(nproc) test
+#	# Test
+#	make -j$(nproc) test && \
 
-RUN \
 	# Install
-	cd /tmp/php/php-${PHP_VERSION} && \
 	make -j$(nproc) install && \
 	mv /usr/local/php/etc/php-fpm.conf.default /usr/local/php/etc/php-fpm.conf && \
-	mv /usr/local/php/etc/php-fpm.d/www.conf.default /usr/local/php/etc/php-fpm.d/www.conf
+	mv /usr/local/php/etc/php-fpm.d/www.conf.default /usr/local/php/etc/php-fpm.d/www.conf && \
+
+	# Cleanup
+	cat /tmp/remove.txt | xargs apt-mark auto && \
+	apt remove -y --auto-remove --purge && \
+	rm -rf /var/lib/apt/lists/* && \
+	rm -rf /tmp/remove.txt && \
+	rm -rf /tmp/php
 
 EXPOSE 9000
 
