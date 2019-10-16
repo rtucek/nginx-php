@@ -1,18 +1,16 @@
-FROM debian:buster AS nginx-build
+FROM debian:buster-slim
 
 ENV \
 	NGINX_VERSION=1.16.1
 
 RUN \
 	apt update && \
-	apt upgrade -y && \
 	apt install -y \
 		# General build dependencies
 		autoconf \
 		build-essential \
 		ca-certificates \
 		curl \
-		git \
 		gpg \
 
 		# Nginx dependencies

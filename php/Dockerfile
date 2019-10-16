@@ -1,22 +1,24 @@
-FROM debian:buster as php-build
+FROM debian:buster-slim
 
 ENV \
 	PHP_VERSION=7.3.10
 
 RUN \
 	apt update && \
-	apt upgrade -y && \
 	apt install -y \
 		# General build dependencies
 		autoconf \
 		build-essential \
 		ca-certificates \
 		curl \
-		git \
 		gpg \
 
-		# PHP dependencies
+		# PHP build dependencies
 		bison \
+		pkg-config \
+		re2c \
+
+		# PHP dependencies
 		libbz2-dev \
 		libcurl4-openssl-dev \
 		libldap2-dev \
@@ -26,9 +28,7 @@ RUN \
 		libssl-dev \
 		libxml2-dev \
 		libxslt1-dev \
-		libzip-dev \
-		pkg-config \
-		re2c
+		libzip-dev
 
 RUN \
 	mkdir -p /tmp/php/ && \
@@ -58,6 +58,7 @@ RUN \
 	# Run configuration
 	cd /tmp/php/php-${PHP_VERSION} && \
 	./configure \
+		--prefix=/usr/local/php/ \
 		--enable-bcmath \
 		--enable-fpm \
 		--enable-mbregex \
@@ -92,8 +93,10 @@ RUN \
 RUN \
 	# Install
 	cd /tmp/php/php-${PHP_VERSION} && \
-	make -j$(nproc) install
+	make -j$(nproc) install && \
+	mv /usr/local/php/etc/php-fpm.conf.default /usr/local/php/etc/php-fpm.conf && \
+	mv /usr/local/php/etc/php-fpm.d/www.conf.default /usr/local/php/etc/php-fpm.d/www.conf
 
 EXPOSE 9000
 
-CMD ["/usr/local/bin/php", "-a"]
+CMD ["/usr/local/php/sbin/php-fpm", "-F"]
