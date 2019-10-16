@@ -91,10 +91,17 @@ RUN \
 
 	# Install
 	make -j$(nproc) install && \
-	mv /usr/local/php/etc/php-fpm.conf.default /usr/local/php/etc/php-fpm.conf && \
-	mv /usr/local/php/etc/php-fpm.d/www.conf.default /usr/local/php/etc/php-fpm.d/www.conf && \
+
+	# Symlink binaries to PATH
+	ln -s /usr/local/php/bin/* /usr/local/bin/ && \
+	ln -s /usr/local/php/sbin/* /usr/local/sbin/ && \
+
+	# Use default templates as initial config files
+	cp /usr/local/php/etc/php-fpm.conf.default /usr/local/php/etc/php-fpm.conf && \
+	cp /usr/local/php/etc/php-fpm.d/www.conf.default /usr/local/php/etc/php-fpm.d/www.conf && \
 
 	# Cleanup
+	cd / && \
 	cat /tmp/remove.txt | xargs apt-mark auto && \
 	apt remove -y --auto-remove --purge && \
 	rm -rf /var/lib/apt/lists/* && \
@@ -103,4 +110,4 @@ RUN \
 
 EXPOSE 9000
 
-CMD ["/usr/local/php/sbin/php-fpm", "-F"]
+CMD ["/usr/local/sbin/php-fpm", "-F"]

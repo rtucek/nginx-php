@@ -61,7 +61,11 @@ RUN \
 	make -j$(nproc) build && \
 	make -j$(nproc) install && \
 
+	# Symlink binaries to PATH
+	ln -s /usr/local/nginx/sbin/* /usr/local/sbin/ && \
+
 	# Cleanup
+	cd / && \
 	cat /tmp/remove.txt | xargs apt-mark auto && \
 	apt remove -y --auto-remove --purge && \
 	rm -rf /var/lib/apt/lists/* && \
@@ -71,4 +75,4 @@ RUN \
 EXPOSE 80
 EXPOSE 443
 
-CMD ["/usr/local/nginx/sbin/nginx", "-g", "daemon off;"]
+CMD ["/usr/local/sbin/nginx", "-g", "daemon off;"]
