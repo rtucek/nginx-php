@@ -61,6 +61,10 @@ RUN \
 	make -j$(nproc) build && \
 	make -j$(nproc) install && \
 
+	# Patch config:
+	# Don't daemonize nginx by default - let it run in foreground
+	echo -e "daemon off;\n$(cat /usr/local/nginx/conf/nginx.conf)" > /usr/local/nginx/conf/nginx.conf && \
+
 	# Symlink binaries to PATH
 	ln -s /usr/local/nginx/sbin/* /usr/local/sbin/ && \
 
@@ -78,4 +82,4 @@ RUN \
 EXPOSE 80
 EXPOSE 443
 
-CMD ["/usr/local/sbin/nginx", "-g", "daemon off;"]
+CMD ["/usr/local/sbin/nginx"]
