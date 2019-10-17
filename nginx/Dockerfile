@@ -64,6 +64,9 @@ RUN \
 	# Symlink binaries to PATH
 	ln -s /usr/local/nginx/sbin/* /usr/local/sbin/ && \
 
+	# Create log directory
+	mkdir -p /var/log/nginx && \
+
 	# Cleanup
 	cd / && \
 	cat /tmp/remove.txt | xargs apt-mark auto && \
