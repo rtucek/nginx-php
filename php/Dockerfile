@@ -1,7 +1,11 @@
 FROM debian:buster-slim
 
 ENV \
-	PHP_VERSION=7.3.10
+	PHP_VERSION=7.3.10 \
+
+	# From https://getcomposer.org/download/
+	COMPOSER_VERSION=1.9.0 \
+	COMPOSER_SHA=c9dff69d092bdec14dee64df6677e7430163509798895fbd54891c166c5c0875
 
 RUN \
 	apt update && \
@@ -34,7 +38,12 @@ RUN \
 		libpq-dev \
 		libreadline-dev \
 		libxslt1-dev \
-		libzip-dev && \
+		libzip-dev \
+
+		# Composer dependency
+		git \
+		unzip \
+		zip && \
 
 	mkdir -p /tmp/php/ && \
 	cd /tmp/php && \
@@ -99,6 +108,13 @@ RUN \
 	# Use default templates as initial config files
 	cp /usr/local/php/etc/php-fpm.conf.default /usr/local/php/etc/php-fpm.conf && \
 	cp /usr/local/php/etc/php-fpm.d/www.conf.default /usr/local/php/etc/php-fpm.d/www.conf && \
+
+	# Install composer (including signature check)
+	cd /tmp/php && \
+	curl -SLo composer.phar https://getcomposer.org/download/${COMPOSER_VERSION}/composer.phar && \
+	[ "$(sha256sum composer.phar | awk '{print $1}')" = "${COMPOSER_SHA}" ] && \
+	chmod +x composer.phar && \
+	cp composer.phar /usr/local/bin/composer && \
 
 	# Cleanup
 	cd / && \
