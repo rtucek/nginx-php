@@ -126,4 +126,8 @@ RUN \
 
 EXPOSE 9000
 
+COPY ./entrypoint.sh /entrypoint
+
+ENTRYPOINT ["/entrypoint"]
+
 CMD ["/usr/local/sbin/php-fpm", "-F"]

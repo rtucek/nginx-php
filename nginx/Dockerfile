@@ -82,4 +82,8 @@ RUN \
 EXPOSE 80
 EXPOSE 443
 
+COPY ./entrypoint.sh /entrypoint
+
+ENTRYPOINT ["/entrypoint"]
+
 CMD ["/usr/local/sbin/nginx"]
